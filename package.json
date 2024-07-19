@@ -35,7 +35,8 @@
 		"format": "prettier --ignore-path ./.gitignore --list-different '**/*.{css,html,js,json,jsx,less,md,scss,ts,tsx,vue,yaml,yml}'",
 		"format:fix": "yarn format --write",
 		"version": "yarn build",
-		"release": "np"
+		"release": "np",
+		"prepare": "npm run build"
 	},
 	"dependencies": {
 		"@babel/runtime": "^7.9.2"
