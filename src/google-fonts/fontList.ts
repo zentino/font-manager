@@ -15,7 +15,7 @@ interface FontResponse extends Font {
 /**
  * Fetch the list of all available fonts from the Google Fonts API
  */
-export default async function getFontList(apiKey: string): Promise<Font[]> {
+export default async function getFontList(_apiKey: string): Promise<Font[]> {
 	// Request list of all Google Fonts, sorted by popularity
 	const url = new URL(LIST_BASE_URL);
 	// url.searchParams.append("sort", "popularity");
