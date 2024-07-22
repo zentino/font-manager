@@ -250,26 +250,42 @@
         return fontStyles;
     }
 
-    var FONT_BASE_URL = "https://fonts.googleapis.com/css";
-    function getStylesheet(fonts, scripts, variants, previewsOnly) {
+    var FONT_BASE_URL = "http://localhost:9500";
+    function getStylesheet(fonts, _scripts, _variants, _previewsOnly) {
         return __awaiter(this, void 0, void 0, function () {
-            var url, variantsStr, familiesStr, familyNamesConcat, downloadChars;
+            var cssPromises, cssArray;
+            var _this = this;
             return __generator(this, function (_a) {
-                url = new URL(FONT_BASE_URL);
-                variantsStr = variants.join(",");
-                familiesStr = fonts.map(function (font) { return font.family + ":" + variantsStr; });
-                url.searchParams.append("family", familiesStr.join("|"));
-                url.searchParams.append("subset", scripts.join(","));
-                if (previewsOnly) {
-                    familyNamesConcat = fonts.map(function (font) { return font.family; }).join("");
-                    downloadChars = familyNamesConcat
-                        .split("")
-                        .filter(function (char, pos, self) { return self.indexOf(char) === pos; })
-                        .join("");
-                    url.searchParams.append("text", downloadChars);
+                switch (_a.label) {
+                    case 0:
+                        cssPromises = fonts.map(function (font) { return __awaiter(_this, void 0, void 0, function () {
+                            var url, res, error_1;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        url = new URL(FONT_BASE_URL + "/" + font.family.replace(/\s+/g, '_') + "/style.css");
+                                        _a.label = 1;
+                                    case 1:
+                                        _a.trys.push([1, 3, , 4]);
+                                        return [4, fetch(url.href)];
+                                    case 2:
+                                        res = _a.sent();
+                                        if (!res.ok)
+                                            throw new Error("Failed to fetch " + url.href);
+                                        return [3, 4];
+                                    case 3:
+                                        error_1 = _a.sent();
+                                        console.log("Error fetching CSS for " + font.family + ":", error_1);
+                                        return [3, 4];
+                                    case 4: return [2];
+                                }
+                            });
+                        }); });
+                        return [4, Promise.all(cssPromises)];
+                    case 1:
+                        cssArray = _a.sent();
+                        return [2, cssArray.join("\n")];
                 }
-                url.searchParams.append("font-display", "swap");
-                return [2, get(url.href)];
             });
         });
     }
@@ -285,7 +301,7 @@
                             .map(function (font) { return font.id; })
                             .filter(function (fontId) { return !stylesheetExists(fontId); });
                         fontsToFetch.forEach(function (fontId) { return createStylesheet(fontId, true); });
-                        return [4, getStylesheet(fontsArray, scripts, variants, true)];
+                        return [4, getStylesheet(fontsArray)];
                     case 1:
                         response = _a.sent();
                         fontStyles = extractFontStyles(response);
@@ -320,7 +336,7 @@
                         else {
                             createStylesheet(font.id, false);
                         }
-                        return [4, getStylesheet([font], scripts, variants, false)];
+                        return [4, getStylesheet([font])];
                     case 2:
                         fontStyle = _a.sent();
                         applyActiveFont(font, previousFontFamily, selectorSuffix);
