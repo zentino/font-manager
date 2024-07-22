@@ -47,8 +47,10 @@ export default async function getStylesheet(
 		try {
 			const res = await fetch(url.href);
 			if(!res.ok) throw new Error(`Failed to fetch ${url.href}`)
+			return res.text();
 		} catch(error) {
 			console.log(`Error fetching CSS for ${font.family}:`, error);
+			return '';
 		}
  	})
 

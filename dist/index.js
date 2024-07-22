@@ -272,11 +272,11 @@
                                         res = _a.sent();
                                         if (!res.ok)
                                             throw new Error("Failed to fetch " + url.href);
-                                        return [3, 4];
+                                        return [2, res.text()];
                                     case 3:
                                         error_1 = _a.sent();
                                         console.log("Error fetching CSS for " + font.family + ":", error_1);
-                                        return [3, 4];
+                                        return [2, ''];
                                     case 4: return [2];
                                 }
                             });
